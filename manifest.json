@@ -1,0 +1,15 @@
+{
+  "name": "Al-Qur'an Digital Modern",
+  "short_name": "Al-Qur'an",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3050/3050258.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+/* Custom Typography & Styles */
+.font-arabic {
+  font-family: 'Amiri', serif;
+  line-height: 2.2;
+}
+
+/* Dynamic Font Sizes */
+body.font-sm { font-size: 0.875rem; }
+body.font-md { font-size: 1rem; }
+body.font-lg { font-size: 1.125rem; }
+
+body.font-sm .font-arabic { font-size: 1.5rem; }
+body.font-md .font-arabic { font-size: 1.875rem; }
+body.font-lg .font-arabic { font-size: 2.25rem; }
+
+/* Mode Hafalan Blur Effect */
+.hafalan-hidden-arabic {
+  filter: blur(8px);
+  user-select: none;
+  cursor: pointer;
+  transition: filter 0.3s ease;
+}
+
+.hafalan-hidden-arabic:hover,
+.hafalan-hidden-arabic.revealed {
+  filter: blur(0px);
+}
+
+.hafalan-hidden-translation {
+  display: none;
+}
+
+/* Theme 1: Emerald Green */
+body.theme-emerald {
+  background-color: #064e3b;
+  color: #ecfdf5;
+}
+body.theme-emerald .bg-slate-800 {
+  background-color: #047857;
+  border-color: #059669;
+}
+body.theme-emerald header,
+body.theme-emerald #audio-bar {
+  background-color: rgba(6, 78, 59, 0.95);
+  border-color: #047857;
+}
+
+/* Theme 2: Warm Sepia */
+body.theme-sepia {
+  background-color: #fef3c7;
+  color: #78350f;
+}
+body.theme-sepia .bg-slate-800 {
+  background-color: #fde68a;
+  border-color: #fcd34d;
+}
+body.theme-sepia .text-slate-100,
+body.theme-sepia .text-white {
+  color: #78350f;
+}
+body.theme-sepia header,
+body.theme-sepia #audio-bar {
+  background-color: rgba(254, 243, 199, 0.95);
+  border-color: #fcd34d;
+}
+
+/* Theme 3: Light Mode */
+html.light body,
+body.theme-light {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+html.light .bg-slate-800,
+body.theme-light .bg-slate-800 {
+  background-color: #ffffff;
+  border-color: #e2e8f0;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+}
+html.light header,
+body.theme-light header,
+html.light #audio-bar,
+body.theme-light #audio-bar {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-color: #e2e8f0;
+}
+html.light .text-slate-100,
+body.theme-light .text-slate-100,
+html.light .text-white,
+body.theme-light .text-white {
+  color: #0f172a;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #10b981;
+}

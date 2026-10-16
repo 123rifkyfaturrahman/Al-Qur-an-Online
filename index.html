@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Al-Qur'an Digital Modern & Fitur Lengkap</title>
+
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#0f172a">
+  <link rel="manifest" href="manifest.json">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen font-sans flex flex-col transition-colors duration-200 text-base theme-slate">
+
+  <!-- Header / Navigation -->
+  <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="#" id="home-link" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl group-hover:scale-105 transition-transform">
+          <i class="fa-solid fa-quran"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg leading-tight text-slate-100">Al-Qur'an Online</h1>
+          <p class="text-xs text-slate-400">Digital Reading & Learning Hub</p>
+        </div>
+      </a>
+
+      <!-- Daily Streak Badge -->
+      <div id="streak-badge" class="hidden sm:flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full text-amber-400 text-xs font-bold" title="Hari berturut-turut membaca Al-Qur'an">
+        <i class="fa-solid fa-fire text-amber-500"></i>
+        <span id="streak-count">0</span> Hari Streak
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        
+
+        <!-- Kompas Kiblat Toggle -->
+        <button id="kiblat-btn" class="p-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-emerald-400 transition flex items-center gap-2 text-sm" title="Arah Kiblat">
+          <i class="fa-solid fa-compass text-emerald-400"></i>
+          <span class="hidden xl:inline">Kiblat</span>
+        </button>
+
+        <!-- Doa & Asmaul Husna Toggle -->
+        <button id="doa-btn" class="p-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-emerald-400 transition flex items-center gap-2 text-sm">
+          <i class="fa-solid fa-hands-praying text-emerald-400"></i>
+          <span class="hidden lg:inline">Doa</span>
+        </button>
+
+        <!-- Jadwal Sholat Toggle -->
+        <button id="sholat-btn" class="p-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-emerald-400 transition flex items-center gap-2 text-sm">
+          <i class="fa-solid fa-mosque text-emerald-400"></i>
+          <span class="hidden md:inline">Jadwal Sholat</span>
+        </button>
+
+        <!-- Bookmark Modal Toggle -->
+        <button id="bookmark-btn" class="p-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-emerald-400 transition flex items-center gap-2 text-sm">
+          <i class="fa-solid fa-bookmark text-emerald-400"></i>
+          <span class="hidden sm:inline">Penanda</span>
+          <span id="bookmark-count" class="bg-emerald-500/20 text-emerald-400 text-xs px-1.5 py-0.5 rounded-full font-bold">0</span>
+        </button>
+
+        <!-- Theme Palette Switcher Dropdown -->
+        <div class="relative">
+          <button id="theme-menu-btn" class="p-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-amber-400 transition">
+            <i class="fa-solid fa-palette"></i>
+          </button>
+          <div id="theme-menu-dropdown" class="absolute right-0 mt-2 w-40 bg-slate-800 border border-slate-700 rounded-xl shadow-xl p-2 space-y-1 hidden z-50">
+            <button onclick="setAppTheme('slate')" class="w-full text-left px-3 py-1.5 rounded-lg text-xs hover:bg-slate-700 flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-slate-900 border border-slate-600"></span> Slate Dark
+            </button>
+            <button onclick="setAppTheme('emerald')" class="w-full text-left px-3 py-1.5 rounded-lg text-xs hover:bg-slate-700 flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-emerald-950 border border-emerald-500"></span> Emerald Green
+            </button>
+            
+            <button onclick="setAppTheme('light')" class="w-full text-left px-3 py-1.5 rounded-lg text-xs hover:bg-slate-700 flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-white border border-slate-300"></span> Light Mode
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 py-6">
+
+    <!-- Countdown Timer Banner Sholat -->
+    <div id="prayer-countdown-bar" class="bg-emerald-950/40 border border-emerald-500/30 rounded-2xl p-4 mb-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-emerald-300 text-sm">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+          <i class="fa-solid fa-clock"></i>
+        </div>
+        <div>
+          <span id="next-prayer-name" class="font-bold text-white">Memuat Jadwal Sholat...</span>
+          <p id="next-prayer-location" class="text-xs text-slate-400"></p>
+        </div>
+      </div>
+      <div class="bg-slate-900/80 px-4 py-1.5 rounded-xl border border-emerald-500/30 font-mono font-bold text-emerald-400 text-base" id="prayer-timer">
+        --:--:--
+      </div>
+    </div>
+
+    <!-- SURAH LIST VIEW -->
+    <section id="surah-list-view" class="space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="lg:col-span-2 bg-gradient-to-r from-emerald-900/40 via-emerald-800/20 to-slate-900 border border-emerald-500/20 rounded-2xl p-6 sm:p-8 flex flex-col justify-center space-y-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 w-max">Al-Qur'an Online Lengkap</span>
+          <h2 class="text-2xl sm:text-3xl font-bold text-white">Bacalah dan Pelajari Al-Qur'an Dimana Saja</h2>
+          <p class="text-slate-400 text-sm">Dilengkapi Kompas Kiblat, Pengatur Kecepatan Suara, Alarm Sholat, Tema Warna, dan Backup Data.</p>
+        </div>
+
+        <!-- Last Read Widget -->
+        <div id="last-read-card" class="bg-slate-800 border border-slate-700 rounded-2xl p-6 flex flex-col justify-between hidden">
+          <div>
+            <div class="flex items-center justify-between text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-2">
+              <span><i class="fa-solid fa-clock-rotate-left mr-1"></i> Terakhir Dibaca</span>
+              <span id="lr-time" class="text-slate-500 text-[10px]"></span>
+            </div>
+            <h3 id="lr-title" class="text-lg font-bold text-white"></h3>
+            <p id="lr-subtitle" class="text-xs text-slate-400 mt-1 truncate"></p>
+          </div>
+          <button id="lr-resume-btn" class="mt-4 w-full bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-semibold py-2 rounded-xl text-xs transition flex items-center justify-center gap-2">
+            <span>Lanjutkan Membaca</span> <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Search Controls -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+        <div class="relative w-full sm:w-96">
+          <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <input 
+            type="text" 
+            id="search-input" 
+            placeholder="Cari surah atau terjemahan..." 
+            class="w-full bg-slate-800 border border-slate-700 rounded-xl pl-11 pr-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition text-slate-100 placeholder-slate-500"
+          >
+        </div>
+        <div class="text-xs text-slate-400 w-full sm:w-auto text-right">
+          Menampilkan <span id="surah-count" class="font-bold text-emerald-400">114</span> Surah
+        </div>
+      </div>
+
+      <!-- Surahs Grid Container -->
+      <div id="surah-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="bg-slate-800/50 border border-slate-700/50 p-4 rounded-xl animate-pulse h-24"></div>
+        <div class="bg-slate-800/50 border border-slate-700/50 p-4 rounded-xl animate-pulse h-24"></div>
+        <div class="bg-slate-800/50 border border-slate-700/50 p-4 rounded-xl animate-pulse h-24"></div>
+      </div>
+    </section>
+
+    <!-- SURAH DETAIL / READING VIEW -->
+    <section id="surah-detail-view" class="hidden space-y-6">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+        <button id="back-to-list" class="flex items-center gap-2 text-slate-400 hover:text-emerald-400 text-sm font-medium transition">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>Kembali ke Daftar Surah</span>
+        </button>
+
+        <div class="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
+          <!-- Toggle Mode Hafalan -->
+          <button id="hafalan-mode-btn" class="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-xs text-slate-300 hover:text-emerald-400 transition flex items-center gap-1.5">
+            <i class="fa-solid fa-eye-slash text-emerald-400"></i>
+            <span>Mode Hafalan: <span id="hafalan-status">Off</span></span>
+          </button>
+
+          <!-- Font Size Adjuster -->
+          <div class="flex items-center bg-slate-800 border border-slate-700 rounded-xl p-1 text-xs">
+            <button id="font-decrease-btn" class="px-2 py-1 text-slate-300 hover:text-emerald-400 font-bold">A-</button>
+            <span class="px-1 text-slate-500">|</span>
+            <button id="font-increase-btn" class="px-2 py-1 text-slate-300 hover:text-emerald-400 font-bold">A+</button>
+          </div>
+
+          <!-- Qari Selector -->
+          <div class="flex items-center gap-2 bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-xl text-xs">
+            <i class="fa-solid fa-microphone-lines text-emerald-400"></i>
+            <select id="qari-select" class="bg-transparent text-slate-200 focus:outline-none cursor-pointer">
+              <option value="05" class="bg-slate-800">Misyari Rasyid Al-Afasi</option>
+              <option value="03" class="bg-slate-800">Abdurrahman as-Sudais</option>
+              <option value="01" class="bg-slate-800">Abdullah Al-Juhany</option>
+              <option value="02" class="bg-slate-800">Abdul Muhsin Al-Qasim</option>
+              <option value="04" class="bg-slate-800">Ibrahim Al-Dossari</option>
+              <option value="06" class="bg-slate-800">Yasser Al-Dosari</option>
+            </select>
+          </div>
+
+          <!-- Surah Navigation -->
+          <div class="flex items-center gap-2">
+            <button id="prev-surah-btn" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs disabled:opacity-40 disabled:cursor-not-allowed">
+              <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <button id="next-surah-btn" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs disabled:opacity-40 disabled:cursor-not-allowed">
+              <i class="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Surah Header Card -->
+      <div id="surah-header-card" class="bg-gradient-to-b from-slate-800 to-slate-800/80 border border-slate-700 rounded-2xl p-6 text-center space-y-4"></div>
+
+      <!-- Bismillah Banner -->
+      <div id="bismillah-container" class="text-center my-8 font-arabic text-3xl sm:text-4xl text-emerald-400 tracking-wide select-none">
+        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+      </div>
+
+      <!-- Verses Container -->
+      <div id="verses-container" class="space-y-4">
+        <div class="py-12 text-center text-slate-400">
+          <i class="fa-solid fa-spinner fa-spin text-3xl text-emerald-400 mb-2"></i>
+          <p>Memuat ayat-ayat Al-Qur'an...</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: Pengaturan Alarm -->
+  <div id="alarm-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-800 border border-slate-700 w-full max-w-md rounded-2xl p-6 shadow-xl space-y-4">
+      <div class="flex justify-between items-center border-b border-slate-700 pb-3">
+        <h3 class="font-bold text-slate-100 flex items-center gap-2">
+          <i class="fa-solid fa-bell text-emerald-400"></i> Alarm Pengingat
+        </h3>
+        <button id="close-alarm-modal" class="text-slate-400 hover:text-slate-200">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3">
+        <div class="flex items-center justify-between bg-slate-900/60 p-3 rounded-xl border border-slate-700">
+          <div>
+            <h4 class="font-bold text-sm text-slate-100">Alarm Waktu Sholat</h4>
+            <p class="text-xs text-slate-400">Bunyi notifikasi saat waktu sholat tiba</p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="toggle-sholat-alarm" class="sr-only peer">
+            <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+          </label>
+        </div>
+
+        <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-700 space-y-2">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="font-bold text-sm text-slate-100">Alarm Tilawah Harian</h4>
+              <p class="text-xs text-slate-400">Pengingat rutin membaca Al-Qur'an</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="toggle-tilawah-alarm" class="sr-only peer">
+              <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+            </label>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-slate-800">
+            <label class="text-xs text-slate-400">Jam Tilawah:</label>
+            <input type="time" id="tilawah-alarm-time" value="20:00" class="bg-slate-800 text-slate-100 border border-slate-700 rounded-lg px-2 py-1 text-xs focus:outline-none">
+          </div>
+        </div>
+      </div>
+
+      <button id="save-alarm-btn" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-2 rounded-xl text-xs transition">
+        Simpan Pengaturan
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: Arah Kiblat -->
+  <div id="kiblat-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-800 border border-slate-700 w-full max-w-sm rounded-2xl p-6 shadow-xl text-center space-y-4">
+      <div class="flex justify-between items-center border-b border-slate-700 pb-3">
+        <h3 class="font-bold text-slate-100 flex items-center gap-2">
+          <i class="fa-solid fa-compass text-emerald-400"></i> Arah Kiblat
+        </h3>
+        <button id="close-kiblat-modal" class="text-slate-400 hover:text-slate-200">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <p class="text-xs text-slate-400">Arah Ka'bah dari lokasi Anda:</p>
+      <div class="relative w-48 h-48 mx-auto flex items-center justify-center bg-slate-900 border-4 border-emerald-500/30 rounded-full my-4">
+        <div id="compass-pointer" class="w-1 h-20 bg-emerald-400 rounded-full transform origin-bottom transition-transform duration-300"></div>
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <i class="fa-solid fa-kaaba text-amber-400 text-2xl"></i>
+        </div>
+      </div>
+      <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-700">
+        <span class="text-xs text-slate-400 block">Arah Derajat Kiblat:</span>
+        <span id="kiblat-degree" class="font-bold text-emerald-400 text-lg">295.2° (Barat Laut)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Doa Harian & Asmaul Husna -->
+  <div id="doa-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-800 border border-slate-700 w-full max-w-3xl rounded-2xl shadow-xl flex flex-col max-h-[85vh]">
+      <div class="p-4 border-b border-slate-700 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <button id="tab-doa" class="font-bold text-emerald-400 border-b-2 border-emerald-400 pb-1 text-sm">Doa Harian</button>
+          <button id="tab-asmaul" class="font-bold text-slate-400 border-b-2 border-transparent pb-1 text-sm hover:text-slate-200">Asmaul Husna</button>
+        </div>
+        <button id="close-doa-modal" class="text-slate-400 hover:text-slate-200">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <div id="doa-modal-content" class="p-5 overflow-y-auto space-y-4 flex-1"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: Bookmark Kategori & Backup Data -->
+  <div id="bookmark-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-800 border border-slate-700 w-full max-w-lg rounded-2xl shadow-xl flex flex-col max-h-[80vh]">
+      <div class="p-4 border-b border-slate-700 flex items-center justify-between">
+        <h3 class="font-bold text-slate-100 flex items-center gap-2">
+          <i class="fa-solid fa-bookmark text-emerald-400"></i> Penanda Ayat & Backup
+        </h3>
+        <div class="flex items-center gap-2">
+          <button onclick="exportUserData()" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded-lg">
+            <i class="fa-solid fa-download"></i> Backup
+          </button>
+          <label class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-2.5 py-1 rounded-lg cursor-pointer">
+            <i class="fa-solid fa-upload"></i> Restore
+            <input type="file" id="import-file-input" class="hidden" accept=".json" onchange="importUserData(event)">
+          </label>
+          <button id="close-modal" class="text-slate-400 hover:text-slate-200 ml-2">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 px-4 pt-3 overflow-x-auto text-xs" id="bookmark-category-filters"></div>
+      <div id="bookmark-list" class="p-4 overflow-y-auto space-y-3 flex-1"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: Select Category for Bookmark -->
+  <div id="category-picker-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-800 border border-slate-700 w-full max-w-sm rounded-2xl p-5 space-y-4">
+      <h3 class="font-bold text-slate-100 text-sm">Pilih Folder Penanda</h3>
+      <div class="space-y-2">
+        <select id="category-select-input" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none">
+          <option value="Ayat Favorit">Ayat Favorit</option>
+          <option value="Target Hafalan">Target Hafalan</option>
+          <option value="Ayat Motivasi">Ayat Motivasi</option>
+          <option value="Lainnya">Lainnya</option>
+        </select>
+        <input type="text" id="custom-category-input" placeholder="Atau ketik nama folder baru..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none">
+      </div>
+      <div class="flex justify-end gap-2">
+        <button id="cancel-bookmark-category" class="px-3 py-1.5 rounded-lg bg-slate-700 text-xs text-slate-300">Batal</button>
+        <button id="save-bookmark-category" class="px-3 py-1.5 rounded-lg bg-emerald-500 text-xs text-slate-950 font-bold">Simpan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Tafsir Ayat -->
+  <div id="tafsir-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-800 border border-slate-700 w-full max-w-2xl rounded-2xl shadow-xl flex flex-col max-h-[80vh]">
+      <div class="p-4 border-b border-slate-700 flex items-center justify-between">
+        <h3 id="tafsir-title" class="font-bold text-slate-100 flex items-center gap-2">
+          <i class="fa-solid fa-book-open text-emerald-400"></i> Tafsir Ayat
+        </h3>
+        <button id="close-tafsir-modal" class="text-slate-400 hover:text-slate-200">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <div id="tafsir-content" class="p-5 overflow-y-auto space-y-3 text-sm text-slate-300 leading-relaxed"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: Jadwal Sholat -->
+  <div id="sholat-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-800 border border-slate-700 w-full max-w-md rounded-2xl shadow-xl flex flex-col overflow-hidden">
+      <div class="p-4 border-b border-slate-700 flex items-center justify-between">
+        <h3 class="font-bold text-slate-100 flex items-center gap-2">
+          <i class="fa-solid fa-mosque text-emerald-400"></i> Jadwal Sholat Harian
+        </h3>
+        <button id="close-sholat-modal" class="text-slate-400 hover:text-slate-200">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <div class="p-5 space-y-4">
+        <div class="space-y-1">
+          <label class="text-xs text-slate-400 font-medium">Pilih Kabupaten / Kota:</label>
+          <select id="city-select" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500">
+            <option value="1301">JAKARTA PUSAT</option>
+            <option value="1219">KOTA BANDUNG</option>
+            <option value="1319">KOTA SURABAYA</option>
+            <option value="1503">KOTA YOGYAKARTA</option>
+            <option value="1221">KOTA SEMARANG</option>
+            <option value="0113">KOTA MEDAN</option>
+            <option value="0404">KOTA MAKASSAR</option>
+            <option value="1609">KOTA PALEMBANG</option>
+            <option value="1701">KOTA DENPASAR</option>
+          </select>
+        </div>
+        <div id="sholat-date-info" class="text-xs text-emerald-400 font-semibold text-center"></div>
+        <div id="sholat-times-grid" class="grid grid-cols-2 gap-3 pt-2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio Fixed Player Footer -->
+  <div id="audio-bar" class="fixed bottom-0 left-0 right-0 bg-slate-800/95 border-t border-slate-700 backdrop-blur-md p-3 z-40 transform translate-y-full transition-transform duration-300">
+    <div class="max-w-6xl mx-auto flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3 overflow-hidden">
+        <div class="w-10 h-10 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg flex-shrink-0">
+          <i class="fa-solid fa-music"></i>
+        </div>
+        <div class="truncate">
+          <p id="audio-title" class="text-sm font-semibold text-slate-100 truncate">Audio Murottal</p>
+          <p id="audio-subtitle" class="text-xs text-slate-400 truncate">Membaca Ayat...</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button id="audio-speed-btn" class="text-xs px-2 py-1 rounded bg-slate-700 text-emerald-400 font-bold hover:bg-slate-600 transition" title="Kecepatan Suara">
+          1.0x
+        </button>
+        <button id="autoplay-toggle-btn" class="text-xs px-2.5 py-1.5 rounded-lg bg-slate-700/60 text-slate-300 hover:text-emerald-400 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-repeat text-emerald-400"></i>
+          <span class="hidden sm:inline">Auto-Play: <span id="autoplay-status">Off</span></span>
+        </button>
+        <button id="audio-prev-btn" class="w-8 h-8 rounded-full bg-slate-700 hover:bg-slate-600 text-slate-200 flex items-center justify-center transition text-xs">
+          <i class="fa-solid fa-backward-step"></i>
+        </button>
+        <button id="audio-play-btn" class="w-10 h-10 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-900 flex items-center justify-center transition text-base">
+          <i class="fa-solid fa-play"></i>
+        </button>
+        <button id="audio-next-btn" class="w-8 h-8 rounded-full bg-slate-700 hover:bg-slate-600 text-slate-200 flex items-center justify-center transition text-xs">
+          <i class="fa-solid fa-forward-step"></i>
+        </button>
+        <button id="audio-close-btn" class="text-slate-400 hover:text-slate-200 p-2 ml-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+    </div>
+    <audio id="global-audio" class="hidden"></audio>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-20 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-950 font-semibold px-4 py-2 rounded-xl text-xs shadow-lg transition-all duration-300 opacity-0 pointer-events-none z-50">
+    Pesan Notifikasi
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 py-6 mt-12 bg-slate-900/50">
+    <div class="max-w-6xl mx-auto px-4 text-center text-xs text-slate-500 space-y-1">
+      <p>Data Al-Qur'an, Tafsir & Jadwal Sholat • <strong>EQuran.id API & MyQuran API</strong></p>
+      <p>&copy; 2026 Al-Qur'an Digital Modern Web App.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
